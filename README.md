@@ -2,7 +2,7 @@
 
 ## Introduction
 
-PayMeForMyAI is a platform that enables anyone to build and monetize their GPTs. GPT Creators can charge their users per chat session, allowing them to generate revenue from their GPT bots. 
+PayMeForMyAI is a platform that enables creators to build and monetize GPTs. GPT Creators can charge their users per chat session, allowing them to generate revenue from their GPT bots. 
 
 To handle and receive payments, GPT creators can integrate their Stripe accounts. The revenue generated from interactions with their GPT is returned to the creator entirely (subtracting any fees charged by Stripe). 
 
