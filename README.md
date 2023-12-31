@@ -10,7 +10,7 @@ There are no limits on the number of chats, and users don't need to have ChatGPT
 
 We intend this to be an open-source alternative to the upcoming GPT store where creators decide what they want to earn from their GPTs and can charge their users directly. 
 
-## How to monetize my GPT bot? 
+## How to monetize your GPT? 
 
 * Sign up or Log in on [PayMeForMyAI](https://www.paymeformyai.com/signup). 
 * Connect your Stripe account to receive payouts.
