@@ -1,0 +1,716 @@
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+  :root {
+    --text-dark: hsl(240, 54%, 15%);
+    --text-light: hsl(242, 18%, 64%);
+    --primary: hsl(222, 98%, 60%);
+    --primary-lighter: hsl(240, 33%, 86%);
+    --primary-gradient: linear-gradient(to right, #3671fd, #6f31ff);
+  }
+
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  a,
+  button {
+    all: unset;
+    cursor: pointer;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  body {
+    font-family: Poppins, sans-serif;
+    min-height: 100vh;
+    background-color: #f5f9ff;
+    display: flex;
+    justify-content: center;
+  }
+
+  .container {
+    max-width: 1070px;
+    width: 60%;
+    display: flex;
+    margin-top: 6%;
+    margin-bottom: 3%;
+    margin-inline: 1rem;
+  }
+
+  .image-section {
+    width: 50%;
+    position: relative;
+  }
+  .image-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+  .image-wrapper img {
+    object-fit: cover;
+  }
+
+  .content-container {
+    background-color: hsla(0, 0%, 100%, 0.3);
+    backdrop-filter: blur(30px);
+    padding: 2rem;
+    width: 80%;
+    color: var(--text-dark);
+    border-radius: 4px;
+    border: 1px solid hsl(0 100% 100% / 0.3);
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .content-container h1 {
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .content-container span {
+    background: var(--primary-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media screen and (max-width: 60rem) {
+    .container {
+      width: 100%;
+      margin: 0;
+    }
+    .content-container {
+      width: 100%;
+    }
+  }
+
+  .form-section {
+    width: 50%;
+    background-color: white;
+    padding: 2.5rem 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .form-wrapper {
+    width: 75%;
+    margin: 0 auto;
+  }
+
+  .form-wrapper > h2 {
+    margin-bottom: 0.1rem;
+  }
+  .form-wrapper > p {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .form-group label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #16164d;
+  }
+  .form-group input {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    padding: 0.5rem;
+    border: 2px solid var(--primary-lighter);
+    border-radius: 0.3rem;
+  }
+  .form-group input:focus {
+    border: 2px solid #16164d;
+  }
+
+  .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .remember-me {
+    display: grid;
+    grid-template-columns: 1rem auto;
+    gap: 0.6rem;
+  }
+
+  input[type="checkbox"] {
+    -webkit-appearance: none;
+    appearance: none;
+    display: grid;
+    place-content: center;
+  }
+
+  .remember-me input {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.3rem;
+    border: 1px solid var(--text-light);
+    border-radius: 2px;
+  }
+
+  input[type="checkbox"]::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    background-color: white;
+    transform: scale(0);
+    transform-origin: bottom left;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+  }
+
+  input[type="checkbox"]:checked::before {
+    transform: scale(1);
+  }
+  .remember-me input:checked {
+    background: var(--primary-gradient);
+  }
+
+  .remember-me label {
+    color: var(--text-dark);
+    user-select: none;
+  }
+  .remember-forgot a {
+    color: var(--primary);
+  }
+  .remember-forgot a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--primary);
+  }
+
+  .login-btn,
+  .google-signin {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+
+    font-weight: 500;
+    padding: 0.5rem 0;
+    border-radius: 0.5rem;
+  }
+
+  .login-btn {
+    color: white;
+    background: var(--primary-gradient);
+  }
+  .login-btn:hover {
+    opacity: 0.9;
+  }
+
+  .or-divider {
+    width: 100%;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-block: 1.5rem;
+    text-align: center;
+    position: relative;
+  }
+  .or-divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 1px;
+    width: 45%;
+    background-color: var(--text-light);
+  }
+  .or-divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 0;
+    height: 1px;
+    width: 45%;
+    background-color: var(--text-light);
+  }
+
+  .google-signin {
+    border: 2px solid var(--primary-lighter);
+  }
+  .google-signin svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  @media screen and (max-width: 50rem) {
+    .container {
+      max-width: 80%;
+      flex-direction: column;
+      margin-inline: 0;
+    }
+
+    .image-section,
+    .form-section {
+      width: 100%;
+    }
+
+    .image-section {
+      height: 25vh;
+      display: none;
+    }
+    .content-container {
+      inset: 0;
+      transform: translate(0, 0);
+      padding: 1rem 1.6rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .content-container h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .content-container p {
+      font-size: 0.75rem;
+    }
+
+    .form-section {
+      flex: 1;
+      padding: 1rem 1rem;
+    }
+    .logo-container {
+      margin-bottom: 1rem;
+    }
+    .form-wrapper > h2 {
+      font-size: 1.25rem;
+    }
+    .form-wrapper > p {
+      margin-bottom: 1rem;
+    }
+    .form-wrapper button {
+      font-size: 0.875rem;
+    }
+    .or-divider {
+      font-weight: 500;
+      margin-block: 0.6rem;
+    }
+  }
+
+  @media screen and (max-width: 36.25rem) {
+    .container {
+      max-width: 100%;
+    }
+    .form-wrapper {
+      width: 100%;
+    }
+  }
+  </style>
+<html lang="en">
+  <head>
+    <link rel="icon" href="img/favico.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayMeForMyAI | Sign Up</title>
+  </head>
+  <body>
+    <section class="container">
+
+      <div class="image-section">
+        <div class="image-wrapper">
+          <img src="img/pic2.png" alt="">
+        </div>
+
+        <!-- <div class="content-container">
+          <h1 class="section-heading">Monetize your custom <span>GPT.</span></h1>
+          <p class="section-paragraph">Pay me for my AI enables creators to monetize their GPTs. Build your custom GPT on a model of your choice. Share it with others and charge your users on your terms.</p>
+        </div> -->
+      </div>
+
+      <div class="form-section">
+  <div class="form-wrapper">
+    <h2>Welcome! 👋🏻</h2>
+    <% if(typeof error == 'undefined') { %>
+    <p>Create your account to get started.</p>
+<% } else { %>
+  <br>
+  <% } %>
+    <form action="validateSignUp" method="POST">
+    <div class="input-container">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" name="full_name" id="name" autocomplete="off" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" autocomplete="off" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" minlength="10" required>
+      </div>
+      <div class="form-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" name="passwordConfirm" id="confirm-password" minlength="10" required>
+      </div>
+    </div>
+
+    <button class="login-btn">Sign Up</button>
+    </form>
+
+    <% if(typeof error != 'undefined') { %>
+    <p style="margin-top: 10px;"> <font color="red">
+      <%=error%> </font>
+  </p>
+  <% } %>
+
+
+
+  <button class="google-signin" style="margin-top: 12px;" onclick="window.location.href = '/auth-google';">
+    <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="96px" height="96px"><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/></svg>
+    <span>Sign up with Google</span>
+  </button>
+
+    <p style="margin-top: 18px;">Already have an account? <a href='/login' style='text-decoration: underline;'>Log in now!</a> </p>
+  </div>
+</div>
+    </section>
+  </body>
+</html>
+
+<!--
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="https://rentparcel.io/css/style.css">
+
+
+<style>
+  .modal-dialog {
+      transition: all .5s ease-in-out;
+      max-width: 1000px !important; /* Increase the width to 1000px */
+      height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+  }
+
+
+  .redirectLogIn, .redirectSignUp, .redirectForgotPass {
+      cursor: pointer;
+  }
+
+
+
+  .modal-header {
+      position: absolute !important;
+      right: 5px;
+      top: 5px;
+      border: none !important;
+      pointer-events: auto !important;
+  }
+
+  .wrapper {
+      max-width: 850px;
+      /* height: 600px !important; */
+      background-color: #fff;
+      position: relative;
+      display: flex;
+      overflow: hidden;
+  }
+
+  .wrapper .wrapper-header {
+      position: absolute;
+      right: 10px;
+      top: 5px;
+      cursor: pointer !important;
+  }
+
+
+  .wrapper .form-left {
+      background: linear-gradient(to right, pink, purple);
+      width: 80%;
+  }
+
+  .wrapper h2 {
+      font-weight: 700;
+      font-size: 25px;
+      padding: 5px 0 0;
+      margin-bottom: 34px;
+      pointer-events: none;
+  }
+
+  .wrapper .form-left p {
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.5;
+      pointer-events: none;
+  }
+
+  .wrapper .form-left .text {
+      margin: 20px 0 25px;
+  }
+
+  .wrapper .form-left p span {
+      font-weight: 700;
+  }
+
+  .wrapper .form-left input {
+      padding: 15px;
+      background: #fff;
+      border-top-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      width: 180px;
+      border: none;
+      margin: 15px 0 50px 0px;
+      cursor: pointer;
+      color: #333;
+      font-weight: 700;
+      font-size: 0.9rem;
+      appearance: unset;
+      outline: none;
+  }
+
+  .wrapper .form-left input:hover {
+      background-color: #f2f2f2;
+  }
+
+  .wrapper .form-right {
+      padding: 20px 40px;
+      position: relative;
+      width: 100%;
+  }
+
+  .wrapper .form-right label {
+      font-weight: 600;
+      font-size: 15px;
+      color: #666;
+      display: block;
+      margin-bottom: 8px;
+  }
+
+  .wrapper .form-right .signup_logo {
+      width: 68px;
+      height: 68px;
+      border: 1px;
+      pointer-events: none;
+  }
+
+
+  .wrapper .form-right .input-field {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #e5e5e5;
+      border-top-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      outline: none;
+      color: #333;
+  }
+
+  .wrapper .form-right .input-field:focus {
+      border: 1px solid #31a031;
+  }
+
+
+  .wrapper .option {
+      display: block;
+      position: relative;
+      padding-left: 30px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      font-weight: 900;
+      cursor: pointer;
+      user-select: none
+  }
+
+  .wrapper .option input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0
+  }
+
+  .wrapper .checkmark {
+      position: absolute;
+      top: 4px;
+      left: 0;
+      height: 18px;
+      width: 18px;
+      background-color: #fff;
+      border: 2px solid #ddd;
+      border-radius: 2px
+  }
+
+  .wrapper .option:hover input~.checkmark {
+      background-color: #f1f1f1
+  }
+
+  .wrapper .option input:checked~.checkmark {
+      border: 2px solid #e5e5e5;
+      background-color: #fff;
+      transition: 300ms ease-in-out all
+  }
+
+  .wrapper .checkmark:after {
+      content: "\2713";
+      position: absolute;
+      display: none;
+      color: #3786bd;
+      font-size: 1rem;
+  }
+
+  .wrapper .option input:checked~.checkmark:after {
+      display: block
+  }
+
+  .wrapper .option .checkmark:after {
+      left: 2px;
+      top: -4px;
+      width: 5px;
+      height: 10px
+  }
+
+  .wrapper .register {
+      padding: 12px;
+      background: #3786bd;
+      border-top-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      width: 130px;
+      border: none;
+      margin: 6px 0 50px 0px;
+      cursor: pointer;
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+  }
+
+  .wrapper .register:hover {
+      background-color: #3785bde0;
+  }
+
+  .wrapper a {
+      text-decoration: none;
+  }
+
+  @media (max-width: 860.5px) {
+      .wrapper {
+          margin: 50px 5px;
+      }
+  }
+
+
+  @media (max-width: 767.5px) {
+      .wrapper {
+          flex-direction: column;
+          margin: 30px 20px;
+      }
+
+      .wrapper .form-left {
+          display: none;
+      }
+
+
+  }
+
+  @media (max-width: 575px) {
+
+      .wrapper {
+          margin: 30px 15px;
+      }
+
+      .wrapper .form-left {
+        display: none;
+      }
+
+      .wrapper .form-right {
+          padding: 25px;
+      }
+  }
+
+  </style>
+<!-- Modal -->
+<!-- <div class="modal signUpModal" id="signUpModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="wrapper">
+            <div class="form-left">
+            </div>
+            <form action="/api/signup" class="form-right" method="POST">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" id="signUpCloseBtn"></button>
+                </div>
+                <div class="form-right-header d-flex justify-content-center align-items-center flex-column">
+                    <div class="signup_logo">
+                      <img src='https://rentparcel.io/img/logo_mobile.png'>
+                    </div>
+                    <h2 class="h3 mb-0">Sign up</h2>
+                    <p>Already a member?<a class="mx-2 redirectLogIn" id="redirectLogIn">Log in</a></p>
+                </div>
+
+                <% if(typeof signUpError != 'undefined') { %>
+
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <%= signUpError %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                <% } %>
+                <div class="mb-3">
+                  <label for="example-email-input" class="form-label">Email</label>
+                  <input class="input-field" name="email" type="email" placeholder="example@example.com"
+                      placeholder="Enter Email" id="example-email-input" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="example-text-input" class="form-label">Username</label>
+                    <input type="text" class="input-field" name="username" minlength="4" maxlength="36" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Password</label>
+                    <input type="password" class="input-field" name="user_password" minlength="6" maxlength="36" required>
+                </div>
+
+
+
+                <div class="form-field">
+                    <button class="btn">
+                        <strong>Sign up</strong>
+                      </button>
+                </div>
+
+
+                <p class="small mt-3 mb-0">By clicking on Sign up, you agree to RentParcel's <a href="#" onClick="showTermsAndConditionForSignUp();">terms of use</a></p><br>
+
+            </form>
+        </div>
+      </div>
+    </div>
+</div>  -->

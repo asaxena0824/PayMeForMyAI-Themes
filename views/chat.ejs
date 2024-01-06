@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>MovieRec GPT </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts Link For Icons -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <script src="js/script.js" defer></script>
+</head>
+
+<body class="light-mode">
+
+
+  <div id="chatgptkey-modal"
+    class="modal font-Bungee fixed top-0 left-0 right-0 bottom-0 bg-gray-500 dark:bg-gray-300  bg-opacity-50 dark:bg-opacity-50  z-50 flex items-center justify-center"
+    style="opacity: 1;">
+    <div
+      class="dark:bg-white text-black dark:text-black border-2 bg-white border-blue-400 max-w-xl w-full p-3 rounded-md mx-2 md:mx-0"
+      style="opacity: 1;">
+      <h2 class="text-xl font-medium text-center my-2">Enter your ChatGPT API Key</h2>
+      <form>
+        <input type="password" placeholder="sk-################################"
+          class="bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 outline-0 focus:border-blue-500 block w-full p-2.5  dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black">
+        <div class=" flex items-center mt-4">
+          <span class="ml-2 text-sm font-medium">
+            Your api key is stored in your own browser
+          </span>
+        </div>
+        <div class=" text-center">
+          <button type="button" id="chatgptkey-modal-button"
+            class="mt-4 py-2.5 disabled:cursor-not-allowed disabled:bg-white  px-5 text-sm font-medium disabled:text-gray-900 focus:outline-none bg-green-500 text-white rounded-lg border border-gray-200   focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Chats container -->
+  <div class="chat-container flex flex-col min-h-screen">
+    <div id="default-container" class="pt-8 relative flex flex-col justify-between h-full px-3">
+      <div class="">
+        <div class="flex items-center justify-center space-x-2"><img src="data:image/png;base64,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" alt="Typing Mind"
+            class="rounded-lg w-12 h-12">
+          <div class="font-semibold text-4xl sm:text-5xl text-black ">MovieRec GPT
+          </div>
+        </div>
+        <div class="text-center my-4 font-light text-base sm:text-xl my-4 sm:my-6 text-black">
+          A movie recommendation GPT.<br> Enter a movie you like and get recommendations 🚀
+
+          </div>
+        <div class="flex items-center justify-center">
+
+            <div class="flex items-center space-x-1">👷🏼&nbsp;
+              <div class="text-sm">Built by <a href='#' style="text-decoration: underline;"><b>aditya</b></a></div>
+            </div></div>
+            <div class="flex items-center justify-center">
+            <div class="flex items-center space-x-1">💰&nbsp;
+              <div class="text-sm">Pricing: free for <b>3</b> chats, then <b>$10</b> per <b>50</b> messages</div>
+            <!-- </div></div><div class="flex items-center justify-center">
+            <div class="flex items-center space-x-1">🥳&nbsp;
+              <div class="text-sm">
+                 Example Prompt: "I love terminator 2!"
+              </div>
+            </div></div>
+            <div class="flex items-center justify-center">
+            <div class="flex items-center space-x-1">🤖&nbsp;
+              <div class="text-sm">
+                 Example Response: "here are some recs for you:  Terminator 3, RoboCop, Aliens,
+              </div>
+            </div></div>
+            <div class="flex items-center justify-center">
+            <div class="flex items-center space-x-1">&nbsp;&nbsp;
+              <div class="text-sm">
+                 Matrix, Terminator 1, Blade Runner, Total Recall, Elysium"
+              </div>
+            </div>
+
+          </div> -->
+        </div></div>
+        <div class="text-center my-4">
+          <a href="https://buy.stripe.com/4gw16B3Js0sneiYfZ6" target="_blank" class="inline-flex items-center justify-center rounded-md bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 space-x-2 font-medium text-white text-sm">
+💳&nbsp;&nbsp;
+  <span class="stripe-connect">Pay with Card</span>
+</a>
+        </div>
+
+      </div>
+      <!-- Typing Prompts -->
+      <div class="w-full flex justify-center">
+        <div class="row1 block mb-4 max-w-2xl w-full">
+          <div class="md:flex md:items-center md:gap-2 ">
+            <button
+              class="border dark:border-gray-200 mb-2 flex w-full text-left p-2 group rounded-md text-sm shadow flex-1 md:flex-row md:items-center">
+              <div class="">
+                <h3 class=" font-bold text-gray-700 ">Recommend me movies</h3>
+                <p class=" text-gray-500 ">for a friend's party</p>
+              </div>
+              <div
+                class="btn text-center ml-auto h-full self-center text-gray-600 dark:text-gray-200 text-lg invisible duration-75 transition-all group-hover:visible ">
+                <span class="material-symbols-rounded h-12 text-gray-600">send</span>
+              </div>
+            </button>
+            <button
+              class="border dark:border-gray-200 mb-2 flex w-full text-left p-2 group rounded-md text-sm shadow flex-1 md:flex-row md:items-center">
+              <div class="">
+                <h3 class=" font-bold text-gray-700 ">Give me movies</h3>
+                <p class=" text-gray-500 ">similar to Terminator 2</p>
+              </div>
+              <div
+                class="btn text-center ml-auto h-full self-center text-gray-600 dark:text-gray-200 text-lg invisible duration-75 transition-all group-hover:visible ">
+                <span class="material-symbols-rounded h-12 text-gray-600">send</span>
+              </div>
+            </button>
+          </div>
+          <div class="md:flex md:items-center md:gap-2 mt-1 ">
+            <button
+              class="border dark:border-gray-200 mb-2 flex w-full text-left p-2 group rounded-md text-sm shadow flex-1 md:flex-row md:items-center">
+              <div class="">
+                <h3 class=" font-bold text-gray-700 ">I want to watch</h3>
+                <p class=" text-gray-500 ">rewatchable comedy flicks</p>
+              </div>
+              <div
+                class="btn text-center ml-auto h-full self-center text-gray-600 dark:text-gray-200 text-lg invisible duration-75 transition-all group-hover:visible ">
+                <span class="material-symbols-rounded h-12 text-gray-600">send</span>
+              </div>
+            </button>
+            <button
+              class="border dark:border-gray-200 mb-2 flex w-full text-left p-2 group rounded-md text-sm shadow flex-1 md:flex-row md:items-center">
+              <div class="">
+                <h3 class=" font-bold text-gray-700 ">Christmas movies</h3>
+                <p class=" text-gray-500 ">to watch with family</p>
+              </div>
+              <div
+                class="btn text-center ml-auto h-full self-center text-gray-600 dark:text-gray-200 text-lg invisible duration-75 transition-all group-hover:visible ">
+                <span class="material-symbols-rounded h-12 text-gray-600">send</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Typing container -->
+  <div class="typing-container flex fixed justify-center bottom-0 w-full bg-white py-4 px-3">
+    <div class="max-w-2xl w-full">
+
+      <!-- Typing Buttons -->
+      <div id="elements-in-action-buttons"
+        class="my-2 text-center w-full flex items-center justify-center flex-wrap gap-2 px-4">
+        <!-- <button data-element-id="regenerate-button"
+          class="inline-flex items-center justify-center rounded-md px-3 py-2 shadow-md transition-all group font-semibold text-xs hover:scale-105 border border-transparent text-white bg-blue-600 hover:bg-blue-500 active:bg-blue-600"><svg
+            stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true"
+            class="w-4 h-4 group-hover:scale-110 transition-all" height="1em" width="1em"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+              d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+              clip-rule="evenodd"></path>
+          </svg><span class="ml-1">Regenerate</span>
+        </button>
+
+        <button data-element-id="share-button"
+          class="inline-flex items-center justify-center rounded-md px-3 py-2 shadow-md transition-all group font-semibold text-xs hover:scale-105 border border-transparent text-white bg-violet-600 hover:bg-violet-500 active:bg-violet-600"><svg
+            stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024"
+            class="w-4 h-4 group-hover:scale-110 transition-all" height="1em" width="1em"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M752 664c-28.5 0-54.8 10-75.4 26.7L469.4 540.8a160.68 160.68 0 0 0 0-57.6l207.2-149.9C697.2 350 723.5 360 752 360c66.2 0 120-53.8 120-120s-53.8-120-120-120-120 53.8-120 120c0 11.6 1.6 22.7 4.7 33.3L439.9 415.8C410.7 377.1 364.3 352 312 352c-88.4 0-160 71.6-160 160s71.6 160 160 160c52.3 0 98.7-25.1 127.9-63.8l196.8 142.5c-3.1 10.6-4.7 21.8-4.7 33.3 0 66.2 53.8 120 120 120s120-53.8 120-120-53.8-120-120-120zm0-476c28.7 0 52 23.3 52 52s-23.3 52-52 52-52-23.3-52-52 23.3-52 52-52zM312 600c-48.5 0-88-39.5-88-88s39.5-88 88-88 88 39.5 88 88-39.5 88-88 88zm440 236c-28.7 0-52-23.3-52-52s23.3-52 52-52 52 23.3 52 52-23.3 52-52 52z">
+            </path>
+          </svg><span class="ml-1">Share</span>
+        </button> -->
+        <p class="">3 Credits Left</p>
+
+      </div>
+      <div class="typing-content flex w-full items-end w-full mt-3">
+        <div class="typing-textarea w-full flex relative w-full">
+          <textarea id="chat-input" spellcheck="false" placeholder="Send a message"
+            class="relative block w-full rounded outline-0 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 min-h-[36px] resize-none md:pl-[20px] py-3  max-h-[500px] sm:text-sm sm:leading-6 overflow-y-auto h-12"
+            required></textarea>
+          <span id="send-btn" class="material-symbols-rounded h-12">send</span>
+        </div>
+        <div class="typing-controls flex">
+          <span id="delete-btn"
+            class="material-symbols-rounded bg-white hover:bg-blue-600 hover:text-white h-12">delete</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

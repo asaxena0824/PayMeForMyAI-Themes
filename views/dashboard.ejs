@@ -1,0 +1,592 @@
+<html lang="en">
+  <head>
+    <link rel="icon" href="img/favico.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayMeForMyAI | Dashboard</title>
+  </head><link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="css/main.css" rel="stylesheet">
+
+  <script>
+    window.history.pushState('dashboard', 'Dashboard', '/dashboard');
+  </script>
+
+<body class="bg-gray-100 min-h-screen">
+
+    <% if(typeof stripeSuccess != 'undefined') { %>
+
+  <div class="relative z-10" id="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <!-- Background backdrop, show/hide based on modal state. -->
+  <div class="fixed inset-0 bg-white bg-opacity-75 transition-opacity"></div>
+
+  <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+      <!-- Modal panel, show/hide based on modal state. -->
+      <div class="relative transform overflow-hidden rounded-lg bg-white text-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-600 sm:mx-0 sm:h-10 sm:w-10">
+              <span class="text-4xl">✅</span> <!-- Smiling face emoji -->
+            </div>
+            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Successfully connected Stripe account</h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-700">
+                  Congratulations! Your Stripe account has been successfully connected. You can now start monetizing your GPT bots.<br><br>
+                  Thank you for choosing our platform. If you have any questions or need assistance, feel free to request support.<br><br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button id="closeButton" type="button" class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% } %>
+
+
+<div class="relative z-10 <% if(typeof transfer_blocked == 'undefined') { %> hidden <% } %>" id="transferblockmodal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<!-- Background backdrop, show/hide based on modal state. -->
+<div class="fixed inset-0 bg-white bg-opacity-75 transition-opacity"></div>
+
+<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+  <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+    <!-- Modal panel, show/hide based on modal state. -->
+    <div class="relative transform overflow-hidden rounded-lg bg-white text-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+      <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+        <div class="sm:flex sm:items-start">
+          <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-600 sm:mx-0 sm:h-10 sm:w-10">
+            <span class="text-4xl">⛔️</span> <!-- Smiling face emoji -->
+          </div>
+          <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Stripe Account Pending Activation</h3>
+            <div class="mt-2">
+              <p class="text-sm text-gray-700">
+                Your Stripe account has been successfully connected, but it's pending activation for accepting payments.<br><br>
+                Once you have resolved any pending restrictions, please click on Launch again to be able to launch your bots.<br><br>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+        <button id="closetransferblockmodal" type="button" class="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-600 sm:ml-3 sm:w-auto">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<% if(typeof newBot != 'undefined') { %>
+
+<div class="relative z-10" id="modalNewBot" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<!-- Background backdrop, show/hide based on modal state. -->
+<div class="fixed inset-0 bg-white bg-opacity-75 transition-opacity"></div>
+
+<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+  <!-- Modal panel, show/hide based on modal state. -->
+  <div class="relative transform overflow-hidden rounded-lg bg-white text-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+      <div class="sm:flex sm:items-start">
+        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-600 sm:mx-0 sm:h-10 sm:w-10">
+          <span class="text-4xl">✅</span> <!-- Smiling face emoji -->
+        </div>
+        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+          <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Successfully created GPT Bot</h3>
+          <div class="mt-2">
+            <p class="text-sm text-gray-700">
+              Congratulations! Your GPT Bot was successfully created.<br><br>
+              To make it public, please click on 'Launch' option below on the GPT bot you have created.<br><br>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gray-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+      <button id="closeButtonNewBot" type="button" class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto">Close</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<% } %>
+
+<% if(typeof editBot != 'undefined') { %>
+
+<div class="relative z-10" id="modalEditBot" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<!-- Background backdrop, show/hide based on modal state. -->
+<div class="fixed inset-0 bg-white bg-opacity-75 transition-opacity"></div>
+
+<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+  <!-- Modal panel, show/hide based on modal state. -->
+  <div class="relative transform overflow-hidden rounded-lg bg-white text-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+      <div class="sm:flex sm:items-start">
+        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-600 sm:mx-0 sm:h-10 sm:w-10">
+          <span class="text-4xl">✅</span> <!-- Smiling face emoji -->
+        </div>
+        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+          <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Successfully edited GPT Bot</h3>
+          <div class="mt-2">
+            <p class="text-sm text-gray-700">
+              Congratulations! Your edits were successfully applied.<br><br>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gray-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+      <button id="closeButtonEditBot" type="button" class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto">Close</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<% } %>
+
+<div class="relative z-10 hidden" id="modalStripe" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<!-- Background backdrop, show/hide based on modal state. -->
+<div class="fixed inset-0 bg-white bg-opacity-75 transition-opacity"></div>
+
+<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+  <!-- Modal panel, show/hide based on modal state. -->
+  <div class="relative transform overflow-hidden rounded-lg bg-white text-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+      <div class="sm:flex sm:items-start">
+        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-yellow-600 sm:mx-0 sm:h-10 sm:w-10">
+          <span class="text-4xl">⛔️</span> <!-- Smiling face emoji -->
+        </div>
+        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+          <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Please connect your Stripe account</h3>
+          <div class="mt-2">
+            <p class="text-sm text-gray-700">
+              Your GPT Bot has been created.<br><br>
+              To launch it and make it public, please connect your Stripe account first so that it can be monetized. <br><br>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gray-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+      <button id="closeButtonStripe" type="button" class="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-600 sm:ml-3 sm:w-auto">Close</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<% if(typeof launched != 'undefined') { %>
+<div class="relative z-10" id="modalLaunched" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<!-- Background backdrop, show/hide based on modal state. -->
+<div class="fixed inset-0 bg-white bg-opacity-75 transition-opacity"></div>
+
+<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+  <!-- Modal panel, show/hide based on modal state. -->
+  <div class="relative transform overflow-hidden rounded-lg bg-white text-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+      <div class="sm:flex sm:items-start">
+        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-600 sm:mx-0 sm:h-10 sm:w-10">
+          <span class="text-4xl">🚀</span> <!-- Smiling face emoji -->
+        </div>
+        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+          <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Successfully Launched GPT Bot!</h3>
+          <div class="mt-2">
+            <p class="text-sm text-gray-700">
+              Congratulations! Your GPT Bot has been launched.<br><br>
+              To access it, you can click on the 'Launched' link from the list below and share it with others. <br><br>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gray-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+      <button id="closeButtonLaunched" type="button" class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto">Close</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<% } %>
+
+<div class="relative z-10 hidden" id="modalConfirm" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<!-- Background backdrop, show/hide based on modal state. -->
+<div class="fixed inset-0 bg-white bg-opacity-75 transition-opacity"></div>
+
+<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+  <!-- Modal panel, show/hide based on modal state. -->
+  <div class="relative transform overflow-hidden rounded-lg bg-white text-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+      <div class="sm:flex sm:items-start">
+        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-yellow-600 sm:mx-0 sm:h-10 sm:w-10">
+          <span class="text-4xl">⚠️</span> <!-- Smiling face emoji -->
+        </div>
+        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+          <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Are you sure?</h3>
+          <div class="mt-2">
+            <p class="text-sm text-gray-700">
+              Once a GPT bot has been launched, it can be accessed by anyone and can only be removed at our discretion.<br><br>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gray-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+      <button id="closeConfirmModal" onclick="closeConfirmModal()" type="button" class="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-600 sm:ml-3 sm:w-auto">Cancel</button>
+      <button id="launchBotButton" onclick="confirmAction()" type="button" class="inline-flex w-full justify-center rounded-md bg-gray-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 sm:ml-3 sm:w-auto">Launch</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="relative z-10 hidden" id="modalCountry" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<!-- Background backdrop, show/hide based on modal state. -->
+<div class="fixed inset-0 bg-white bg-opacity-75 transition-opacity"></div>
+
+<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+  <!-- Modal panel, show/hide based on modal state. -->
+  <div class="relative transform overflow-hidden rounded-lg bg-white text-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+    <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+      <div class="sm:flex sm:items-start">
+        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+          <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Choose Country:</h3>
+          <div class="mt-2">
+            <p class="text-sm text-gray-700">
+              <form action="createExpressAccount" method="POST">
+                <select name="country" class="py-3 px-4 pe-9 block w-full bg-gray-100 border-transparent rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-700 dark:border-transparent dark:text-gray-400 dark:focus:ring-gray-600">
+                <option value="AR">Argentina</option>
+                <option value="AU">Australia</option>
+                <option value="AT">Austria</option>
+                <option value="BH">Bahrain</option>
+                <option value="BE">Belgium</option>
+                <option value="BO">Bolivia</option>
+                <option value="BR">Brazil</option>
+                <option value="BG">Bulgaria</option>
+                <option value="CA">Canada</option>
+                <option value="CL">Chile</option>
+                <option value="CO">Colombia</option>
+                <option value="CR">Costa Rica</option>
+                <option value="HR">Croatia</option>
+                <option value="CY">Cyprus</option>
+                <option value="CZ">Czech Republic</option>
+                <option value="DK">Denmark</option>
+                <option value="DO">Dominican Republic</option>
+                <option value="EG">Egypt</option>
+                <option value="EE">Estonia</option>
+                <option value="FI">Finland</option>
+                <option value="FR">France</option>
+                <option value="DE">Germany</option>
+                <option value="GR">Greece</option>
+                <option value="HK">Hong Kong</option>
+                <option value="HU">Hungary</option>
+                <option value="IS">Iceland</option>
+                <option value="IN">India</option>
+                <option value="ID">Indonesia</option>
+                <option value="IE">Ireland</option>
+                <option value="IL">Israel</option>
+                <option value="IT">Italy</option>
+                <option value="JP">Japan</option>
+                <option value="LV">Latvia</option>
+                <option value="LI">Liechtenstein</option>
+                <option value="LT">Lithuania</option>
+                <option value="LU">Luxembourg</option>
+                <option value="MT">Malta</option>
+                <option value="MX">Mexico</option>
+                <option value="NL">Netherlands</option>
+                <option value="NZ">New Zealand</option>
+                <option value="NG">Nigeria</option>
+                <option value="NO">Norway</option>
+                <option value="PK">Pakistan</option>
+                <option value="PY">Paraguay</option>
+                <option value="PE">Peru</option>
+                <option value="PL">Poland</option>
+                <option value="PT">Portugal</option>
+                <option value="RO">Romania</option>
+                <option value="SG">Singapore</option>
+                <option value="SK">Slovakia</option>
+                <option value="SI">Slovenia</option>
+                <option value="ZA">South Africa</option>
+                <option value="KR">South Korea</option>
+                <option value="ES">Spain</option>
+                <option value="LK">Sri Lanka</option>
+                <option value="SE">Sweden</option>
+                <option value="CH">Switzerland</option>
+                <option value="TH">Thailand</option>
+                <option value="TT">Trinidad & Tobago</option>
+                <option value="AE">United Arab Emirates</option>
+                <option value="GB">United Kingdom</option>
+                <option value="US" selected>United States</option>
+                <option value="UY">Uruguay</option>
+                <option value="VN">Vietnam</option>
+              </select>
+
+              <br>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-gray-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+      <button id="launchBotButton" type="submit" class="inline-flex w-full justify-center rounded-md bg-gray-800 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-600 sm:ml-3 sm:w-auto">Connect</button>
+      <button id="closeConnectStripeModal" type="button" class="inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-600 sm:ml-3 sm:w-auto">Cancel</button>
+    </div>
+  </form>
+  </div>
+</div>
+</div>
+</div>
+
+
+<div id="loadingModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+ <div class="bg-white p-4 rounded-lg">
+   <h2 class="text-lg font-bold text-slate-900">Launching GPT Bot...</h2>
+   <div class="flex justify-center mt-2">
+     <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-yellow-500"></div>
+   </div>
+ </div>
+</div>
+
+
+  <header class="flex justify-between items-center px-6 py-4 bg-white border-b border-slate-300">
+    <span class="text-2xl font-bold text-gray-900">PayMeForMyAI</span>
+    <nav>
+      <ul class="flex space-x-4">
+        <li class="hidden sm:block"><a href="#" class="text-slate-900 hover:text-slate-700">Home</a></li>
+        <li class="relative">
+          <a href="#" class="text-slate-900 hover:text-slate-700" onclick="toggleDropdown()">
+            <%= user.full_name %>
+            <span class="text-sm">
+              <svg class="w-4 h-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </span>
+          </a>
+          <!-- absolute hidden bg-white border border-slate-300 rounded-lg py-2 mt-2 -->
+          <ul id="accountDropdown" class="absolute right-0 mt-2 w-40 bg-white py-1 mt-2 rounded-xl shadow-lg border border-gray-300 divide-y divide-gray-700 z-10 hidden">
+            <li><a href="#" class="block px-4 py-2 text-gray-900 hover:bg-gray-100">Dashboard</a></li>
+            <li><a href="https://discord.gg/FnktGy3mkV" target="_blank" class="block px-4 py-2 text-gray-900 hover:bg-gray-100">Join Support Discord</a></li>
+            <li><a href="/signout" class="block px-4 py-2 text-gray-900 hover:bg-gray-100">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- <main class="flex flex-col items-center justify-center h-screen bg-red-100 mt-2"> -->
+  <div class="text-center mx-auto max-w-3xl items-center justify-center border border-gray-400 bg-white p-4 px-8 mt-16">
+    <h1 class="text-3xl font-extrabold text-gray-800">Welcome to PayMeForMyAI 👋</h1>
+    <p class="text-base text-gray-700 mt-4 leading-relaxed text-left">
+      We believe in fair monetization and revenue sharing policies. When you create a AI or GPT bot with us, you can specify the monetization terms, and we'll take a <b>0%</b> cut out of any income you earn from your bot usage.  <br><br>Watch the demo <a href="https://youtu.be/Tko64mxlAqc" target="_blank" class="underline">here</a><br><br>Start by creating a GPT bot by clicking the create button below.
+    <% if(!user.stripe_connected) { %>
+      In order to start receiving income from your bots, you will need to connect your stripe account.
+    <% } %>  <br>
+    </p>
+    <button onclick="window.location.href = '/newbot';" class="bg-gray-900 text-white font-semibold hover:bg-gray-700 rounded-lg px-6 py-2 mt-6" style="height:44px;">Create Bot</button>
+    <% if(!user.stripe_connected) { %>
+    <button onclick="showCountryModal();" class="text-white font-semibold hover:bg-purple-100 rounded-lg px-6 py-4 mt-6" style="background-image: url('img/stripe1.png');width: 200px;height:44px;background-size:contain;"></button>
+    <% } %>
+
+  </div>
+
+
+<% if (bots.length > 0) { %>
+  <div class="text-center mx-auto max-w-4xl items-center justify-center border border-gray-400 bg-white p-4 px-8 mt-16">
+    <h1 class="text-3xl font-extrabold text-gray-800">Your GPT Bots 💰</h1>
+    <table class="bots-table text-base text-gray-700 mt-4 leading-relaxed text-left" style="width: 100%; border-collapse: separate; border-spacing: 10px;">
+        <thead>
+            <tr>
+                <th style="padding: 8px;"></th> <!-- Empty header for the edit icon -->
+                <th style="padding: 8px;">Image</th>
+                <th class="chat-price" style="padding: 8px; text-align: center;">Name</th>
+                <th class="chat-price" style="padding: 8px; text-align: center;">Chat Price</th>
+                <th class="free-chats" style="padding: 8px; text-align: center;">Free Chats</th>
+                <th class="free-chats" style="padding: 8px; text-align: center;">Live Usage</th>
+                <th style="padding: 8px;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(var i = 0; i < bots.length; i++) { %>
+                <tr>
+                  <td style="padding: 8px; text-align: center;">
+                      <!-- Pencil Edit Icon -->
+                      <i onclick="window.location.href='/edit/<%=bots[i].bot_name%>'" class="fas fa-edit cursor-pointer"></i>
+                    </td>
+                    <td style="padding: 8px;"><img src="<%=bots[i].bot_profile_pic%>" alt="Bot Image" style="height: 60px;width: 60px;"></td>
+                    <td class="chat-price" style="padding: 8px; text-align: center;"><%=bots[i].bot_name%></td>
+                    <td class="chat-price" style="padding: 8px; text-align: center;">$<%=bots[i].bot_price%> / <%=bots[i].bot_price_value%></td>
+                    <td class="free-chats" style="padding: 8px; text-align: center;"><%=bots[i].bot_free_chats%></td>
+                    <td class="free-chats" style="padding: 8px; text-align: center;"><%=bots[i].bot_live_usage%></td>
+                    <td style="padding: 8px;">
+                      <% if(!bots[i].is_live) { %>
+                        <% if(!user.stripe_connected) { %>
+                          <button onclick="showStripeModal()" class="bg-gray-900 text-white font-semibold hover:bg-gray-700 rounded-lg px-6 py-2" style="height:42px;">Launch</button>
+                        <% } else { %>
+                          <div class="button-container">
+    <button onclick="window.open('/'+'<%=bots[i].bot_name%>', '_blank');" class="button-style">Test</button>
+    <button onclick="showLaunchModal('<%=bots[i]._id%>')" class="button-style">Launch</button>
+                          </div>
+                      <% } %>
+                    <% } else { %>
+                      <a href="/<%=bots[i].bot_name%>" target="_blank" class="underline font-semibold">Launched &#x2197;</a>
+                    <% } %>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+<% } %>
+<br><br>
+  <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById('accountDropdown');
+      const icon = document.getElementById('dropdownIcon');
+      dropdown.classList.toggle('hidden');
+      icon.classList.toggle('rotate-180');
+    }
+
+    <% if(typeof launched != 'undefined') { %>
+
+    const modalLaunched = document.getElementById('modalLaunched');
+    const closeButtonLaunched = document.getElementById('closeButtonLaunched');
+
+    closeButtonLaunched.addEventListener('click', () => {
+     modalLaunched.classList.add('hidden');
+   });
+
+   <% } %>
+
+    const modalStripe = document.getElementById('modalStripe');
+
+    function showStripeModal() {
+      modalStripe.classList.remove('hidden');
+    }
+
+    const closeButtonStripe = document.getElementById('closeButtonStripe');
+
+    closeButtonStripe.addEventListener('click', () => {
+     modalStripe.classList.add('hidden');
+   });
+
+   <% if(typeof stripeSuccess != 'undefined') { %>
+
+    const modal = document.getElementById('modal');
+
+    const closeButton = document.getElementById('closeButton');
+
+    closeButton.addEventListener('click', () => {
+     modal.classList.add('hidden');
+   });
+
+   <% } %>
+
+   <% if(typeof newBot != 'undefined') { %>
+
+   const modalNewBot = document.getElementById('modalNewBot');
+
+   const closeButtonNewBot = document.getElementById('closeButtonNewBot');
+
+   closeButtonNewBot.addEventListener('click', () => {
+    modalNewBot.classList.add('hidden');
+  });
+
+  <% } %>
+
+  <% if(typeof editBot != 'undefined') { %>
+
+  const modalEditBot = document.getElementById('modalEditBot');
+
+  const closeButtonEditBot = document.getElementById('closeButtonEditBot');
+
+  closeButtonEditBot.addEventListener('click', () => {
+   modalEditBot.classList.add('hidden');
+ });
+
+ <% } %>
+
+  const transferblockmodal = document.getElementById('transferblockmodal');
+
+  function showBlockedModal() {
+    transferblockmodal.classList.remove('hidden');
+  }
+
+  const closetransferblockmodal = document.getElementById('closetransferblockmodal');
+
+  closetransferblockmodal.addEventListener('click', () => {
+   transferblockmodal.classList.add('hidden');
+ });
+
+ const modalCountry = document.getElementById('modalCountry');
+
+ const closeConnectStripeModal = document.getElementById('closeConnectStripeModal');
+
+ closeConnectStripeModal.addEventListener('click', () => {
+   modalCountry.classList.add('hidden');
+  });
+
+  function showCountryModal() {
+    modalCountry.classList.remove('hidden');
+  }
+
+   function showLaunchModal(botId) {
+    // Store the botId in a global variable or a data attribute
+    window.currentBotId = botId;
+    const modalConfirm = document.getElementById('modalConfirm');
+    modalConfirm.classList.remove('hidden');
+   }
+
+   function closeConfirmModal() {
+     const modalConfirm = document.getElementById('modalConfirm');
+     modalConfirm.classList.add('hidden');
+   }
+
+   function confirmAction() {
+    // Perform the action
+    createBotOnStripe(window.currentBotId);
+    // Close the modal
+   }
+
+   function createBotOnStripe(id) {
+     closeConfirmModal();
+     const modalLoading = document.getElementById('loadingModal');
+     modalLoading.classList.remove('hidden');
+     var xhr = new XMLHttpRequest();
+     xhr.open('POST', '/createBotOnStripe', true);
+     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+     xhr.onload = function () {
+
+       var data = JSON.parse(this.responseText);
+
+       if (data == "error") {
+
+         return;
+       }
+
+       if (data == "stripe") {
+         window.location.href = "/dashboard?transfer_blocked=true";
+         return;
+       }
+
+        window.location.href = "/dashboard?launched=true";
+     };
+
+     xhr.send('id='+id);
+   }
+
+  </script>
+
+
+
+</body>

@@ -1,0 +1,312 @@
+<html lang="en">
+  <head>
+    <link rel="icon" href="img/favico.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayMeForMyAI | Create GPT Bot</title>
+  </head><link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+
+
+<body class="bg-gray-100 min-h-screen">
+
+
+  <header class="flex hidden justify-between items-center px-6 py-4 bg-white border-b border-slate-300">
+    <span class="text-2xl font-bold text-gray-900">PayMeForMyAI</span>
+    <nav>
+      <ul class="flex space-x-4">
+        <li><a href="/dashboard" class="text-slate-900 hover:text-slate-700">Home</a></li>
+        <li><a href="#" class="text-slate-900 hover:text-slate-700">About</a></li>
+        <li class="relative">
+          <a href="#" class="text-slate-900 hover:text-slate-700" onclick="toggleDropdown()">
+            <%= user.full_name %>
+            <span class="text-sm">
+              <svg class="w-4 h-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </span>
+          </a>
+          <ul id="accountDropdown" class="absolute hidden bg-yellow-100 border border-slate-300 rounded-lg py-2 mt-2">
+            <li><a href="#" class="block px-4 py-2 text-slate-900 hover:bg-slate-100">Profile</a></li>
+            <li><a href="#" class="block px-4 py-2 text-slate-900 hover:bg-slate-100">Settings</a></li>
+            <li><a href="#" class="block px-4 py-2 text-slate-900 hover:bg-slate-100">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="flex min-h-screen items-center justify-center mt-4">
+    <div class="bg-white shadow-none rounded-2xl border border-gray-300 p-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-6">Create New GPT Bot</h1>
+
+      <form id="creation_form" method="POST">
+      <div class="mb-6">
+  <label for="image" class="text-base font-semibold text-gray-700">Upload Image</label>
+  <div class="flex items-center mt-2 flex-wrap" id="image-upload-container">
+    <input type="file" id="image" name="image" accept="image/*" class="hidden" onchange="updateImageName()">
+    <label for="image" class="bg-white text-gray-900 border border-gray-200 rounded-xl px-3 py-2 flex items-center gap-x-2 cursor-pointer">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      <span>Choose Image</span>
+    </label>
+    <span class="ml-2" id="image_name"></span>
+  </div>
+</div>
+
+      <div class="mb-6">
+        <label for="name" class="text-base font-semibold text-gray-700">GPT Bot Name</label>
+        <input type="text" id="bot_name" name="name" placeholder="Enter your bot name" class="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-1 focus:ring-slate-300 focus-visible:outline-2 focus-visible:outline-offset-4" maxlength="30" required>
+        <span id="urlPrefix" class="text-gray-600 px-1 py-2 text-sm">paymeformyai.com/</span>
+      </div>
+      <div class="mb-6">
+        <label for="description" class="text-base font-semibold text-gray-700">GPT Bot Description</label>
+        <textarea id="bot_description" name="description" placeholder="Enter a longer description" rows="3" class="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-1 focus:ring-slate-300 focus-visible:outline-2 focus-visible:outline-offset-4" minlength="10" maxlength="120" required></textarea>
+      </div>
+      <div class="mb-6">
+        <label for="description" class="text-base font-semibold text-gray-700">Prompt</label>
+        <textarea id="bot_prompt" name="description" placeholder="Enter a prompt for your AI...ex:- You are a bot called JokeGPT whose job is to reply with jokes to anything. Keep your responses short." rows="6" class="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-1 focus:ring-slate-300 focus-visible:outline-2 focus-visible:outline-offset-4" minlength="20" maxlength="15000" required></textarea>
+      </div>
+      <div class="mb-6">
+        <label for="knowledge_base" class="text-base font-semibold text-gray-700">Knowledge Base (optional PDF)</label>
+        <div class="flex items-center mt-2">
+          <input type="file" id="knowledge_base" name="knowledge_base" class="hidden" accept=".pdf" onchange="updateFileName()">
+          <label for="knowledge_base" class="bg-white text-gray-900 border border-gray-200 rounded-xl px-3 py-2 flex items-center gap-x-2 cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            <span>Choose File</span>
+          </label>
+          <span class="ml-2" id="file_name"></span>
+        </div>
+      </div>
+      <div class="mb-6">
+        <label for="key" class="text-base font-semibold text-gray-700">OpenAI API Key (optional)</label>
+        <input type="text" id="bot_key" name="key" placeholder="Enter your OpenAI API Key" class="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-1 focus:ring-slate-300 focus-visible:outline-2 focus-visible:outline-offset-4" maxlength="80" autocomplete="one-time-code">
+        <p class="text-gray-600 ml-1 text-sm">Your users will be prompted to provide their own key if this is missing</p>
+      </div>
+      <div class="mb-6">
+  <h2 class="text-base font-bold text-gray-900 mb-4">Monetization Terms</h2>
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>
+  <label for="price" class="text-base font-semibold text-gray-700">Price ($ USD)</label>
+  <input type="number" id="bot_price" name="price" min="1" step="1" placeholder="Enter price in USD" class="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-1 focus:ring-slate-300 focus-visible:outline-2 focus-visible:outline-offset-4" required>
+  <!-- <p class="text-sm text-gray-600 ml-1">Stripe charges a 2.9% + $0.30 fee on all transactions</p> -->
+</div>
+
+    <div>
+      <label for="num_chats" class="text-base font-semibold text-gray-700">Number of Chats for Price</label>
+      <input type="number" id="bot_price_value" name="num_chats" min="1" step="1" max="999999" placeholder="Enter number of chats" class="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-1 focus:ring-slate-300 focus-visible:outline-2 focus-visible:outline-offset-4" required>
+    </div>
+    <div>
+      <label for="free_chats" class="text-base font-semibold text-gray-700">Free Chats</label>
+      <input type="number" id="bot_free_chats" name="free_chats" min="3" step="1" max="999999" placeholder="Enter number of free chats" class="w-full px-3 py-2 border border-gray-200 rounded-xl focus:ring-1 focus:ring-slate-300 focus-visible:outline-2 focus-visible:outline-offset-4" required>
+    </div>
+  </div>
+</div>
+<div id="errordiv" class="mt-5 mx-auto text-red-500" style="display: none;"><div class="mb-6">
+<span id="error">Please upload an image for your GPT bot.</span>
+</div></div>
+      <div class="flex justify-end">
+        <button type="submit" class="bg-white hover:bg-gray-100 text-white-900 px-3 py-2 rounded-2xl border border-gray-200 ml-4">Create GPT Bot</button>
+      </div>
+      </form>
+    </div>
+  </div>
+  <div id="loadingModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+   <div class="bg-white p-4 rounded-lg">
+     <h2 class="text-lg font-bold text-slate-900">Creating GPT Bot...</h2>
+     <div class="flex justify-center mt-2">
+       <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-yellow-500"></div>
+     </div>
+   </div>
+ </div>
+
+
+</body>
+
+
+<script>
+  const textarea = document.getElementById("bot_prompt");
+
+  textarea.addEventListener("input", function () {
+  // Temporarily reduce rows to minimum to correctly calculate scrollHeight
+  textarea.rows = 1;
+
+  // Calculate the number of rows needed based on content height
+  const rowsNeeded = Math.max(6, Math.min(20, Math.ceil(textarea.scrollHeight / 24))); // Adjust 24 to match your textarea's line height
+
+  // Set the rows attribute to the calculated value
+  textarea.rows = rowsNeeded;
+});
+
+  const urlPrefix = document.getElementById('urlPrefix');
+
+  document.getElementById('bot_name').addEventListener('input', function (e) {
+      this.value = this.value.replace(/\s/g, ''); // This will remove all spaces
+      this.value = this.value.replace(/[^a-zA-Z0-9]/g, '');
+      urlPrefix.textContent = 'paymeformyai.com/' + this.value;
+  });
+
+function updateImageName() {
+    var input = document.getElementById('image');
+    var imageNameSpan = document.getElementById('image_name');
+    if(input.files.length > 0) {
+      imageNameSpan.textContent = input.files[0].name;
+    } else {
+      imageNameSpan.textContent = 'No image selected';
+    }
+  }
+
+  function formatCurrency(input) {
+  // Remove all non-numeric characters and leading zeros
+  let numericValue = input.value.replace(/[^0-9.]/g, '').replace(/^0+/, '');
+
+  // Update the input value
+  input.value = '$' + numericValue;
+  }
+
+  function updateFileName() {
+      var input = document.getElementById('knowledge_base');
+      var imageNameSpan = document.getElementById('file_name');
+      if(input.files.length > 0) {
+        imageNameSpan.textContent = input.files[0].name;
+      } else {
+        imageNameSpan.textContent = 'No file selected';
+      }
+    }
+
+    document.getElementById("creation_form").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const id = "<%= user._id%>";
+      const gpt_bot_name = document.getElementById("bot_name").value;
+      const gpt_bot_description = document.getElementById("bot_description").value;
+      const gpt_bot_prompt = document.getElementById("bot_prompt").value;
+      const gpt_bot_price = document.getElementById("bot_price").value;
+      const gpt_bot_price_value = document.getElementById("bot_price_value").value;
+      const gpt_bot_free_chats = document.getElementById("bot_free_chats").value;
+      const gpt_bot_key = document.getElementById("bot_key").value;
+
+      var profileInput = document.getElementById('image');
+      var profile_img = profileInput.files[0];
+      var knowledge_base = document.getElementById('knowledge_base');
+      var knowledge_base_file = knowledge_base.files[0];
+
+      if (!profile_img) {
+        document.getElementById('error').innerHTML = 'Please upload an image for your GPT bot.';
+        document.getElementById('errordiv').style.display = 'block';
+        return;
+      }
+
+      var xhr = new XMLHttpRequest();
+      const formData = new FormData();
+      formData.append('id', id);
+
+      if (knowledge_base_file) {
+        var sizeLimit = 30 * 1024 * 1024; // 5 MB in bytes
+        if (knowledge_base_file.size > sizeLimit) {
+          document.getElementById('error').innerHTML = 'Please limit your knowledge base file size to 30 MB.';
+          document.getElementById('errordiv').style.display = 'block';
+          return;
+        }
+      }
+
+      formData.append('uploadfile', knowledge_base_file);
+      formData.append('gpt_bot_name', gpt_bot_name);
+      formData.append('gpt_bot_description', gpt_bot_description);
+      formData.append('gpt_bot_prompt', gpt_bot_prompt);
+      formData.append('gpt_bot_price', gpt_bot_price);
+      formData.append('gpt_bot_price_value', gpt_bot_price_value);
+      formData.append('gpt_bot_free_chats', gpt_bot_free_chats);
+      formData.append('gpt_bot_key', gpt_bot_key);
+
+      xhr.open('POST', '/createGPTBot', true);
+      const modal = document.getElementById('loadingModal');
+      modal.classList.remove('hidden');
+
+      xhr.onload = function () {
+
+        var data = JSON.parse(this.responseText);
+        console.log(data);
+
+        if (data == "missing") {
+          document.getElementById('error').innerHTML = 'Please fill out all the required information.';
+          document.getElementById('errordiv').style.display = 'block';
+          modal.classList.add('hidden');
+          return;
+        }
+
+        if (data == "exists") {
+          document.getElementById('error').innerHTML = 'The name \"' + gpt_bot_name + '\" is already in use. Please select another one.';
+          document.getElementById('errordiv').style.display = 'block';
+          modal.classList.add('hidden');
+          return;
+        }
+
+        if (data == "moderation") {
+          document.getElementById('error').innerHTML = 'Your prompt or knowledge base has failed the OpenAI moderation check.';
+          document.getElementById('errordiv').style.display = 'block';
+          modal.classList.add('hidden');
+          return;
+        }
+
+        if (data == "price") {
+          document.getElementById('error').innerHTML = 'The bot price cannot exceed $999 at the moment.';
+          document.getElementById('errordiv').style.display = 'block';
+          modal.classList.add('hidden');
+          return;
+        }
+
+        if (data == "key") {
+          document.getElementById('error').innerHTML = 'Your API key cannot be used. Please ensure you have a valid payment method added on OpenAI.';
+          document.getElementById('errordiv').style.display = 'block';
+          modal.classList.add('hidden');
+          return;
+        }
+
+        if (data == "content") {
+          document.getElementById('error').innerHTML = 'Your knowledge base exceeds the allowed limit of 400k characters.';
+          document.getElementById('errordiv').style.display = 'block';
+          modal.classList.add('hidden');
+          return;
+        }
+
+        if (data == "error") {
+          document.getElementById('error').innerHTML = 'Something went wrong while creating the GPT bot. Please contact support if error persists.';
+          document.getElementById('errordiv').style.display = 'block';
+          modal.classList.add('hidden');
+          return;
+        }
+
+        var xhr1 = new XMLHttpRequest();
+        xhr1.open('POST', '/addProfilePic', true);
+        const formData1 = new FormData();
+        formData1.append('uploadfile', profile_img);
+        formData1.append('id', id);
+        formData1.append('bot_id', data);
+
+        xhr1.onload = function () {
+          var data1 = JSON.parse(this.responseText);
+
+          if (data1 == "error") {
+            document.getElementById('error').innerHTML = 'Something went wrong while creating the GPT bot. Please contact support if error persists.';
+            document.getElementById('errordiv').style.display = 'block';
+            modal.classList.add('hidden');
+            return;
+          }
+
+          window.location.href = '/dashboard?newBot=true';
+        }
+
+        xhr1.send(formData1);
+    }
+
+      xhr.send(formData);
+
+    })
+
+
+</script>
