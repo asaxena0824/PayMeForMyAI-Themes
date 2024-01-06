@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title><%=bot.bot_name%> </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta property="og:title" content="<%=bot.bot_name%>">
+  <meta property="og:description" content="<%=bot.bot_description%>">
+  <meta property="og:type" content="website">
+  <meta property="image" content="<%=bot.bot_profile_pic%>">
+  <meta property="og:image" content="<%=bot.bot_profile_pic%>">
+
+  <meta property="og:image:url" content="https://paymeformyai.com/img/pic2.png">
+  <link rel="stylesheet" href="css/checkout.css" />
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts Link For Icons -->
+  <link rel="icon" href="img/favico.ico">
+  <link rel="stylesheet" href="css/styleBot.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <script>
+    var imgURL = "<%= bot.bot_profile_pic %>";
+    var botId = "<%= bot._id %>";
+    var chat_credits = "<%= bot.bot_price_value %>";
+
+  </script>
+  <!-- <script src="js/script.js" defer></script> -->
+</head>
+
+<body class="light-mode">
+
+  <div id="chatgptkey-modal"
+    class="modal hidden font-Bungee fixed top-0 left-0 right-0 bottom-0 bg-gray-500 dark:bg-gray-300  bg-opacity-50 dark:bg-opacity-50  z-50 flex items-center justify-center"
+    style="opacity: 1;">
+    <div
+      class="dark:bg-white text-black dark:text-black border-2 bg-white border-blue-400 max-w-xl w-full p-3 rounded-md mx-2 md:mx-0"
+      style="opacity: 1;">
+      <h2 class="text-xl font-medium text-center my-2">Enter your ChatGPT API Key</h2>
+
+        <input type="password" placeholder="sk-################################" id="apiKey"
+          class="bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 outline-0 focus:border-blue-500 block w-full p-2.5  dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black">
+        <div class=" flex items-center mt-4">
+          <span class="ml-2 text-sm font-medium" id="textkey">
+            Your api key is required for continued usage. It is protected and not exposed in the browser. You can change it any time you want.
+
+            <br><br>Click <a href="https://beta.openai.com/account/api-keys" style="text-decoration: underline;" target="_blank">here</a> to retrieve your key
+          </span>
+        </div>
+        <div class=" text-center">
+          <button type="button" id="chatgptkey-modal-button"
+            class="mt-4 py-2.5 disabled:cursor-not-allowed disabled:bg-white  px-5 text-sm font-medium disabled:text-gray-900 focus:outline-none bg-green-500 text-white rounded-lg border border-gray-200   focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            Save
+          </button>
+          <button type="button" id="close-button"
+        class="mt-4 hidden py-2.5 disabled:cursor-not-allowed disabled:bg-white px-5 text-sm font-medium disabled:text-gray-900 focus:outline-none bg-red-500 text-white rounded-lg border border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+            Close
+          </button>
+        </div>
+
+    </div>
+  </div>
+
+  <div id="login-popup" tabindex="-1"
+      class="bg-black/50 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 h-full items-center justify-center flex">
+      <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+
+          <div class="relative bg-white rounded-lg shadow">
+              <button type="button"
+                  class="absolute hidden top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center popup-close"><svg
+                      aria-hidden="true" class="w-5 h-5" fill="#c6c7c7" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          cliprule="evenodd"></path>
+                  </svg>
+                  <span class="sr-only">Close popup</span>
+              </button>
+
+              <div class="p-5">
+                  <h3 class="text-2xl mb-0.5 font-medium"></h3>
+                  <p class="mb-4 text-sm font-normal text-gray-800"></p>
+
+                  <div class="text-center">
+                      <p class="mb-3 text-2xl font-semibold leading-5 text-slate-900">
+                          Login to your account
+                      </p>
+                      <p class="mt-2 text-sm leading-4 text-slate-600">
+                          You must be logged in to use this AI.
+                      </p>
+                  </div>
+
+                  <div class="mt-7 flex flex-col gap-2">
+
+                      <button
+                          class="inline-flex hidden h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"><img
+                              src="https://www.svgrepo.com/show/512317/github-142.svg" alt="GitHub"
+                              class="h-[18px] w-[18px] ">
+                          Continue with GitHub
+                      </button>
+
+                      <button
+                        onclick="window.location.href = '/auth-google-bot?botName=<%=bot.bot_name %>';" class="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"><img
+                              src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"
+                              class="h-[18px] w-[18px] ">Continue with
+                          Google
+                      </button>
+
+
+                      <button
+                          class="inline-flex hidden h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"><img
+                              src="https://www.svgrepo.com/show/448234/linkedin.svg" alt="Google"
+                              class="h-[18px] w-[18px] ">Continue with
+                          LinkedIn
+                      </button>
+                  </div>
+
+                  <div class="flex w-full items-center gap-2 py-6 text-sm text-slate-600">
+                      <div class="h-px w-full bg-slate-200"></div>
+                      OR
+                      <div class="h-px w-full bg-slate-200"></div>
+                  </div>
+
+
+                  <form class="w-full" action="loginUser" method="post">
+                      <label for="email" class="sr-only">Email address</label>
+                      <input name="email" type="email" autocomplete="email" required=""
+                          class="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+                          placeholder="Email Address" value="">
+                      <label for="password" class="sr-only">Password</label>
+                      <input name="password" type="password" autocomplete="current-password" required=""
+                          class="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+                          placeholder="Password" value="">
+                      <p class="mb-3 hidden mt-2 text-sm text-gray-500">
+                          <a href="/forgot-password" class="text-blue-800 hover:text-blue-600">Reset your password?</a>
+                      </p>
+                      <input type="hidden" name="botside" value="<%=bot.bot_name%>">
+                      <% if(typeof error != 'undefined') { %>
+                      <span class="text-red-500 text-sm mt-2">we could not find an account with these credentials.</span>
+                      <% } %>
+                      <button type="submit"
+                          class="inline-flex mt-4 w-full items-center justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400">
+                          Continue
+                      </button>
+                  </form>
+
+
+                  <div class="mt-6 text-center text-sm text-slate-600">
+                      Don't have an account?
+                      <a href="" onclick="toggleSignInPopup(); return false;" class="font-medium text-[#4285f4]">Sign up</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div id="signup-popup" tabindex="-1"
+      class="bg-black/50 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 h-full items-center justify-center flex">
+      <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+
+          <div class="relative bg-white rounded-lg shadow">
+              <button type="button"
+                  class="absolute hidden top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center popup-close"><svg
+                      aria-hidden="true" class="w-5 h-5" fill="#c6c7c7" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          cliprule="evenodd"></path>
+                  </svg>
+                  <span class="sr-only">Close popup</span>
+              </button>
+
+              <div class="p-5">
+                  <h3 class="text-2xl mb-0.5 font-medium"></h3>
+                  <p class="mb-4 text-sm font-normal text-gray-800"></p>
+
+                  <div class="text-center">
+                      <p class="mb-3 text-2xl font-semibold leading-5 text-slate-900">
+                          Create an Account
+                      </p>
+                      <p class="mt-2 text-sm leading-4 text-slate-600">
+                          You must sign up to use this AI.
+                      </p>
+                  </div>
+
+                  <div class="mt-7 flex flex-col gap-2">
+
+                      <button
+                          class="inline-flex hidden h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"><img
+                              src="https://www.svgrepo.com/show/512317/github-142.svg" alt="GitHub"
+                              class="h-[18px] w-[18px] ">
+                          Continue with GitHub
+                      </button>
+
+                      <button
+                        onclick="window.location.href = '/auth-google-bot?botName=<%=bot.bot_name %>';" class="inline-flex h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"><img
+                              src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"
+                              class="h-[18px] w-[18px] ">Continue with
+                          Google
+                      </button>
+
+
+                      <button
+                          class="inline-flex hidden h-10 w-full items-center justify-center gap-2 rounded border border-slate-300 bg-white p-2 text-sm font-medium text-black outline-none focus:ring-2 focus:ring-[#333] focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"><img
+                              src="https://www.svgrepo.com/show/448234/linkedin.svg" alt="Google"
+                              class="h-[18px] w-[18px] ">Continue with
+                          LinkedIn
+                      </button>
+                  </div>
+
+                  <div class="flex w-full items-center gap-2 py-6 text-sm text-slate-600">
+                      <div class="h-px w-full bg-slate-200"></div>
+                      OR
+                      <div class="h-px w-full bg-slate-200"></div>
+                  </div>
+
+
+                  <form class="w-full" id="signup-form">
+                      <label for="full_name" class="sr-only">Full Name</label>
+                      <input name="full_name" type="text" id="full_name" required=""
+                        class="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+                        placeholder="Full Name" value="">
+                      <label for="email" class="sr-only">Email address</label>
+                      <input name="email" type="email" autocomplete="email" id="signup_email" required=""
+                          class="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+                          placeholder="Email Address" value="">
+                      <label for="password" class="sr-only">Password</label>
+                      <input name="password" type="password" id="password" autocomplete="current-password" minlength=10 required=""
+                          class="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+                          placeholder="Password" value="">
+                      <p class="mb-3 hidden mt-2 text-sm text-gray-500">
+                          <a href="/forgot-password" class="text-blue-800 hover:text-blue-600">Reset your password?</a>
+                      </p>
+                      <input type="hidden" name="botside" value="<%=bot.bot_name%>">
+                      <span class="text-red-500 text-sm mt-2 hidden" id="signup_error">Account already exists. Please log in instead.</span>
+
+                      <button type="submit" id="signup_submit"
+                          class="inline-flex mt-4 w-full items-center justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400">
+                          Continue
+                      </button>
+                  </form>
+
+                  <form class="w-full hidden" id="verify-form">
+
+                      <label for="verify_code" class="sr-only">Verification Code</label>
+                      <input name="verify_code" id="verify_code" type="password" autocomplete="current-password" required=""
+                          class="mt-2 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+                          placeholder="Enter Verification Code" value="">
+                          <span class="text-sm text-gray-600 mt-2" >Verification code sent to your email.</span>
+
+                      <p class="mb-3 hidden mt-2 text-sm text-gray-500">
+                          <a href="/forgot-password" class="text-blue-800 hover:text-blue-600">Reset your password?</a>
+                      </p>
+
+                      <input type="hidden" name="botside" value="<%=bot.bot_name%>"><br>
+                      <span class="text-red-500 text-sm mt-2 hidden" id="verify_error">You've entered the wrong verification code.</span>
+
+                      <button type="submit" id="verify_submit"
+                          class="inline-flex mt-4 w-full items-center justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400">
+                          Continue
+                      </button>
+                  </form>
+
+                  <div class="mt-6 text-center text-sm text-slate-600">
+                      Already have an account?
+                      <a href=""  onclick="toggleSignUpPopup(); return false;" class="font-medium text-[#4285f4]">Sign in</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+ <% if(typeof newCredits != 'undefined') { %>
+  <div class="relative z-10" id="modalCredits" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <!-- Background backdrop, show/hide based on modal state. -->
+  <div class="fixed inset-0 bg-white bg-opacity-75 transition-opacity"></div>
+
+  <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+      <!-- Modal panel, show/hide based on modal state. -->
+      <div class="relative transform overflow-hidden rounded-lg bg-white text-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+        <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-600 sm:mx-0 sm:h-10 sm:w-10">
+              <span class="text-4xl">✅</span> <!-- Smiling face emoji -->
+            </div>
+            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Credits Purchase Successful</h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-700">
+                  Congratulations! Your credits purchase was successful. Thank you for supporting the bot creator.<br><br>
+                  The new credits have been applied to your account. If you have need assistance, feel free to request support.<br><br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+          <button id="closeButtonCredits" type="button" class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% } %>
+
+  <!-- Chats container -->
+  <div class="chat-container flex flex-col min-h-screen">
+    <div id="default-container" class="pt-8 relative flex flex-col justify-between items-center h-full px-3">
+      <div class="max-w-2xl">
+        <div class="flex items-center justify-center space-x-2"><img src="<%=bot.bot_profile_pic%>" alt="<%=bot.bot_name%>"
+            class="rounded-lg w-12 h-12">
+          <div class="font-semibold text-4xl sm:text-5xl text-black "> <%=bot.bot_name%>
+          </div>
+        </div>
+        <div class="text-center my-4 font-light text-base sm:text-xl my-4 sm:my-6 text-black">
+               <%=bot.bot_description%>
+ </div>
+ <div class="flex items-center justify-center">
+
+     <div class="flex items-center space-x-1">👷🏼&nbsp;
+       <div class="text-sm">Built by <b><%=creator.full_name%></b></div>
+     </div></div>
+     <div class="flex items-center justify-center">
+     <div class="flex items-center space-x-1">💰&nbsp;
+       <div class="text-sm">Pricing: free for <b><%=bot.bot_free_chats%></b> chats, then <b>$<%=bot.bot_price%></b> per <b><%=bot.bot_price_value%></b> messages</div>
+     <!-- </div></div><div class="flex items-center justify-center">
+     <div class="flex items-center space-x-1">🥳&nbsp;
+       <div class="text-sm">
+          Example Prompt: "I love terminator 2!"
+       </div>
+     </div></div>
+     <div class="flex items-center justify-center">
+     <div class="flex items-center space-x-1">🤖&nbsp;
+       <div class="text-sm">
+          Example Response: "here are some recs for you:  Terminator 3, RoboCop, Aliens,
+       </div>
+     </div></div>
+     <div class="flex items-center justify-center">
+     <div class="flex items-center space-x-1">&nbsp;&nbsp;
+       <div class="text-sm">
+          Matrix, Terminator 1, Blade Runner, Total Recall, Elysium"
+       </div>
+     </div>
+
+   </div> -->
+ </div></div>
+ <% if (bot.has_knowledge_base) { %>
+ <div class="flex items-center justify-center">
+<div class="flex items-center space-x-1">📕️&nbsp;
+  <div class="text-sm">Has a custom <b>knowledge base</b></div>
+</div>
+</div>
+<% } %>
+ <div class="text-center my-4">
+   <a href="#" id="stripeLink" onclick="showStripeLModal()" class="inline-flex items-center justify-center rounded-md bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 py-2 px-4 space-x-2 font-medium text-white text-sm">
+💳&nbsp;&nbsp;
+<span class="stripe-connect">Pay with Card</span>
+</a>
+ </div>
+
+</div>
+
+<!-- Typing Prompts -->
+<div class="w-full flex justify-center">
+ <div class="row1 block mb-4 max-w-2xl w-full">
+   <div class="md:flex md:items-center md:gap-2 ">
+     <button
+       class="border dark:border-gray-200 mb-2 flex w-full text-left p-2 group rounded-md text-sm shadow flex-1 md:flex-row md:items-center">
+       <div class="">
+         <h3 class=" font-bold text-gray-700 ">Tell me more</h3>
+         <p class=" text-gray-500 ">about this bot</p>
+       </div>
+       <div
+         class="btn text-center ml-auto h-full self-center text-gray-600 dark:text-gray-200 text-lg invisible duration-75 transition-all group-hover:visible ">
+         <span class="material-symbols-rounded h-12 text-gray-600">send</span>
+       </div>
+     </button>
+     <button
+       class="border dark:border-gray-200 mb-2 flex w-full text-left p-2 group rounded-md text-sm shadow flex-1 md:flex-row md:items-center">
+       <div class="">
+         <h3 class=" font-bold text-gray-700 ">Request Support</h3>
+         <p class=" text-gray-500 ">Join our Support Discord</p>
+       </div>
+       <div
+         class="btn text-center ml-auto h-full self-center text-gray-600 dark:text-gray-200 text-lg invisible duration-75 transition-all group-hover:visible ">
+         <span class="material-symbols-rounded h-12 text-gray-600">send</span>
+       </div>
+     </button>
+   </div>
+   <div class="md:flex md:items-center md:gap-2 mt-1 ">
+     <button
+       class="border dark:border-gray-200 mb-2 flex w-full text-left p-2 group rounded-md text-sm shadow flex-1 md:flex-row md:items-center">
+       <div class="">
+         <h3 class=" font-bold text-gray-700 ">Create your own</h3>
+         <p class=" text-gray-500 ">Make your PayMeForMyAI bot</p>
+       </div>
+       <div
+         class="btn text-center ml-auto h-full self-center text-gray-600 dark:text-gray-200 text-lg invisible duration-75 transition-all group-hover:visible ">
+         <span class="material-symbols-rounded h-12 text-gray-600">send</span>
+       </div>
+     </button>
+     <button
+       class="border dark:border-gray-200 mb-2 flex w-full text-left p-2 group rounded-md text-sm shadow flex-1 md:flex-row md:items-center">
+      <div class="">
+           <h3 class=" font-bold text-gray-700 ">Add ChatGPT API Key</h3>
+           <p class=" text-gray-500 ">required after 10 free credits</p>
+       </div>
+       <div
+         class="btn text-center ml-auto h-full self-center text-gray-600 dark:text-gray-200 text-lg invisible duration-75 transition-all group-hover:visible ">
+         <span class="material-symbols-rounded h-12 text-gray-600">send</span>
+       </div>
+     </button>
+   </div>
+ </div>
+</div>
+</div>
+
+</div>
+
+<!-- Typing container -->
+<div class="typing-container flex fixed justify-center bottom-0 w-full bg-white py-4 px-3">
+<div class="max-w-2xl w-full">
+
+<!-- Typing Buttons -->
+<div id="elements-in-action-buttons"
+ class="my-2 text-center w-full flex items-center justify-center flex-wrap gap-2 px-4">
+ <!-- <button data-element-id="regenerate-button"
+   class="inline-flex items-center justify-center rounded-md px-3 py-2 shadow-md transition-all group font-semibold text-xs hover:scale-105 border border-transparent text-white bg-blue-600 hover:bg-blue-500 active:bg-blue-600"><svg
+     stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true"
+     class="w-4 h-4 group-hover:scale-110 transition-all" height="1em" width="1em"
+     xmlns="http://www.w3.org/2000/svg">
+     <path fill-rule="evenodd"
+       d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+       clip-rule="evenodd"></path>
+   </svg><span class="ml-1">Regenerate</span>
+ </button> -->
+
+ <button data-element-id="share-button" id="buyButton" onclick="showStripeLModal()"
+    class="hidden inline-flex items-center justify-center rounded-md px-3 py-2 shadow-md transition-all group font-semibold text-xs hover:scale-105 border border-transparent text-white bg-violet-600 hover:bg-violet-500 active:bg-violet-600">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:scale-110 transition-all" height="1em" width="1em" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+    </svg>
+    <span class="ml-1">Buy Credits</span>
+ </button>
+
+ <div id="stripeModal" class="modal hidden fixed top-0 left-0 right-0 bottom-0 bg-white dark:bg-white  bg-opacity-50 dark:bg-opacity-50  z-50 flex items-center justify-center" style="opacity: 1;">
+   <div class="modal-content" onclick="event.stopPropagation();">
+ <form id="payment-form" class="form-container">
+   <div id="address-element">
+     <!--Stripe.js injects the Payment Element-->
+   </div>
+   <div id="payment-element">
+     <!--Stripe.js injects the Payment Element-->
+   </div>
+   <button id="submit" class="custom-button">
+     <div class="spinner hidden" id="spinner"></div>
+     <span id="button-text">Pay now ($<%= bot.bot_price%>)</span>
+   </button>
+   <div id="payment-message" class="hidden"></div>
+ </form>
+ </div></div>
+
+ <p class=""><span id="credits_user"></span></p>
+
+</div>
+<div class="typing-content flex w-full items-end w-full mt-3">
+ <div class="typing-textarea w-full flex relative w-full">
+   <textarea id="chat-input" spellcheck="false" maxlength="3000" placeholder="Send a message"
+     class="relative block w-full rounded outline-0 rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 min-h-[36px] resize-none md:pl-[20px] py-3  max-h-[500px] sm:text-sm sm:leading-6 overflow-y-auto h-12"
+     required></textarea>
+   <span id="send-btn" class="material-symbols-rounded h-12">send</span>
+ </div>
+ <div class="typing-controls flex">
+   <span id="delete-btn"
+     class="material-symbols-rounded bg-white hover:bg-blue-600 hover:text-white h-12">delete</span>
+ </div>
+</div>
+</div>
+</div>
+
+</body>
+
+<script>
+function toggleSignInPopup() {
+   var loginPopup = document.getElementById('login-popup');
+   var signupPopup = document.getElementById('signup-popup');
+
+   if (loginPopup && signupPopup) {
+       loginPopup.classList.add('hidden');
+       signupPopup.classList.remove('hidden');
+   }
+ }
+
+ function toggleSignUpPopup() {
+    var loginPopup = document.getElementById('login-popup');
+    var signupPopup = document.getElementById('signup-popup');
+
+    if (loginPopup && signupPopup) {
+        signupPopup.classList.add('hidden');
+        loginPopup.classList.remove('hidden');
+        document.getElementById("signup-form").classList.remove("hidden");
+        document.getElementById("verify-form").classList.add("hidden");
+        document.getElementById("verify_error").classList.add("hidden");
+    }
+  }
+
+  document.getElementById("signup-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    document.getElementById('signup_submit').innerHTML = "Verifying account...";
+
+    var email = document.getElementById("signup_email").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/sendVerificationEmail', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhr.onload = function () {
+
+      document.getElementById('signup_submit').innerHTML = "Continue";
+
+      var data = JSON.parse(this.responseText);
+      console.log(data);
+
+      if (data === "error") {
+        document.getElementById("signup_error").classList.remove("hidden");
+        return;
+      }
+
+      document.getElementById("signup_error").classList.add("hidden");
+      document.getElementById("signup-form").classList.add("hidden");
+      document.getElementById("verify-form").classList.remove("hidden");
+    }
+
+    xhr.send('email='+email);
+
+  });
+
+  document.getElementById("verify-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    document.getElementById("verify_error").classList.add("hidden");
+    document.getElementById('verify_submit').innerHTML = "Creating account...";
+
+    var email = document.getElementById("signup_email").value;
+    var password = document.getElementById("password").value;
+    var full_name = document.getElementById("full_name").value;
+    var verifyCode = document.getElementById("verify_code").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/verifyUser', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhr.onload = function () {
+
+      document.getElementById('verify_submit').innerHTML = "Continue";
+
+      var data = JSON.parse(this.responseText);
+      console.log(data);
+
+      if (data === "error") {
+        document.getElementById("verify_error").classList.remove("hidden");
+        return;
+      }
+
+      setTimeout(function() {
+        location.reload();
+      }, 3000);
+
+    }
+
+    xhr.send('email=' + email + '&password=' + password + '&full_name=' + full_name + '&verifyCode=' + verifyCode + '&botside=true');
+
+  });
+
+</script>
+
+</html>
