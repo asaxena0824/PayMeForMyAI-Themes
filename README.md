@@ -29,5 +29,6 @@ There are no limits on the number of chats, and users don't need to have ChatGPT
    
 <img width="1435" alt="Screenshot 2024-01-28 at 9 28 09 PM" src="https://github.com/asaxena0824/PayMeForMyAI-Themes/assets/121717018/c56930d6-36b7-499b-aeae-2b6c686496ea">
 
+![image](https://github.com/asaxena0824/PayMeForMyAI-Themes/assets/121717018/871c247f-3162-40b2-9d6f-f92950353be9)
 
    
