@@ -31,4 +31,9 @@ There are no limits on the number of chats, and users don't need to have ChatGPT
 
 ![image](https://github.com/asaxena0824/PayMeForMyAI-Themes/assets/121717018/871c247f-3162-40b2-9d6f-f92950353be9)
 
+### Dark Chat 
+
+<img width="1107" alt="Screenshot 2024-02-08 at 2 01 19 AM" src="https://github.com/asaxena0824/PayMeForMyAI-Themes/assets/121717018/189d9618-6fb3-403a-bb6b-40dc5f0a4713">
+
+
    
