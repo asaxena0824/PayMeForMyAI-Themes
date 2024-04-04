@@ -1,39 +1,165 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat App</title>
+  <meta charset="utf-8">
+  <title>
+
+    SampleApp
+
+  </title>
+  <link rel="icon" href="https://pointe-aditya.s3.amazonaws.com/plain-black-background.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Facebook Meta Tags -->
+  <meta property="og:url" content="https://pmfm.ai/SampleApp">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SampleApp">
+  <meta property="og:description" content="opus claude bot">
+  <meta property="og:image" content="https://pointe-aditya.s3.amazonaws.com/plain-black-background.jpg">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="twitter:domain" content="pmfm.ai/SampleApp">
+  <meta property="twitter:url" content="https://pmfm.ai/SampleApp">
+  <meta name="twitter:title" content="SampleApp">
+  <meta name="twitter:description" content="opus claude bot">
+  <meta name="twitter:image" content="https://pointe-aditya.s3.amazonaws.com/plain-black-background.jpg">
+
+  <link rel="stylesheet" href="css/checkout.css" />
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="js/checkout.js" defer></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.3"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
+<script>
+  var clientSecret = "329328943";
+  var imgURL = "https://pointe-aditya.s3.amazonaws.com/plain-black-background.jpg";
+  var botId = "123948494";
+  var chat_credits = "";
+  var bot_attr = false;
+  var botName = "SampleApp"
+  var customer_name = "Aditya Saxena";
+  var customer_email = "asaxena1415@yahoo.com";
+  var isDalle = false;
+  var size = "1024x1024";
+  var disablePayments = false;
+  var user_img = "img/user.webp";
+
+
+
+
+
+
+    disablePayments = true;
+
+
+
+
+
+
+</script>
+
+<div class="relative hidden z-10" id="modalCredits" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<!-- Background backdrop, show/hide based on modal state. -->
+<div class="fixed bg-gray-800 text-white bg-opacity-50 inset-0 "></div>
+
+<div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+  <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+    <!-- Modal panel, show/hide based on modal state. -->
+    <div class="relative transform overflow-hidden rounded-lg bg-white text-gray-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+      <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+        <div class="sm:flex sm:items-start">
+          <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-600 sm:mx-0 sm:h-10 sm:w-10">
+            <span class="text-4xl">✅</span> <!-- Smiling face emoji -->
+          </div>
+          <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+            <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Credits Purchase Successful</h3>
+            <div class="mt-2">
+              <p class="text-sm text-gray-700">
+                Congratulations! Your credits purchase was successful. Thank you for supporting the bot creator.<br><br>
+                The new credits have been applied to your account. If you have need assistance, feel free to request support.<br><br>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-200 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+        <button id="closeButtonCredits" type="button" class="inline-flex w-full justify-center rounded-md bg-green-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-600 sm:ml-3 sm:w-auto">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="chatgptkey-modal"
+  class="modal hidden font-Bungee fixed top-0 left-0 right-0 bottom-0 bg-gray-500 bg-opacity-50 z-50 flex items-center justify-center"
+  style="opacity: 1; color: #CBD5E0;">
+  <div
+    class="bg-black text-white border-2 border-blue-600 max-w-xl w-full p-3 rounded-md mx-2 md:mx-0"
+    style="opacity: 1;">
+    <h2 class="text-xl font-medium text-center my-2">Enter your ChatGPT API Key</h2>
+
+      <input type="password" placeholder="sk-################################" id="apiKey"
+        class="bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 outline-0 focus:border-blue-500 block w-full p-2.5  dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black">
+      <div class=" flex items-center mt-4">
+        <span class="ml-2 text-sm font-medium" id="textkey">
+          Your api key is required for continued usage. It is protected and not exposed in the browser. You can change it any time you want.
+
+          <br><br>Click <a href="https://beta.openai.com/account/api-keys" style="text-decoration: underline;" target="_blank">here</a> to retrieve your key
+        </span>
+      </div>
+      <div class=" text-center">
+        <button type="button" id="chatgptkey-modal-button"
+          class="mt-4 py-3.5 px-5 text-sm font-medium text-white rounded-lg border border-gray-600 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-700 focus:ring-opacity-50">
+          Save
+</button>
+<button type="button" id="close-button"
+          class="mt-4 py-3.5 px-5 text-sm font-medium text-white rounded-lg border border-gray-600 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-700 focus:ring-opacity-50">
+          Close
+</button>
+      </div>
+
+  </div>
+</div>
+
+<div id="stripeModal" class="modal hidden fixed top-0 left-0 right-0 bottom-0 bg-gray-800 text-white bg-opacity-50 z-50 flex items-center justify-center" style="opacity: 1;">
+<form id="payment-form" class="form-container">
+  <div id="address-element">
+    <!--Stripe.js injects the Payment Element-->
+  </div>
+  <div id="payment-element">
+    <!--Stripe.js injects the Payment Element-->
+  </div>
+  <button id="submit" class="custom-button">
+    <div class="spinner hidden" id="spinner"></div>
+    <span id="button-text">Pay now ($1)</span>
+  </button>
+  <div id="payment-message" class="hidden"></div>
+</form>
+</div>
 
 <body class="">
 
     <main class="flex flex-col h-full min-h-screen wrapper">
-        <div class="fixed top-0 left-0 w-full z-50 chattop">
+        <div class="fixed top-0 left-0 w-full z-60 chattop" style="z-index: 1000;">
             <div class="wrapper flex flex-row justify-between items-center py-3 px-2 border-b border-gray-700">
                 <div class="flex items-center">
-                    <button class="btn me-8 px-2 py-3" role="button">
-                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="24"
-                            width="24" xmlns="http://www.w3.org/2000/svg" data-darkreader-inline-fill=""
-                            data-darkreader-inline-stroke=""
-                            style="--darkreader-inline-fill: currentColor; --darkreader-inline-stroke: currentColor;">
-                            <path fill="none" d="M0 0h24v24H0z"></path>
-                            <path d="M17.77 3.77L16 2 6 12l10 10 1.77-1.77L9.54 12z"></path>
-                        </svg>
-                    </button>
-                    <a href="#" class="text-base font-semibold">Example chat</a>
+
+                    <a href="#" class="text-base font-semibold">
+                      SampleApp
+                    </a>
                 </div>
-                <button
-                    class="inline-flex items-center justify-center rounded-md px-3 py-2 shadow-md transition-all group font-semibold text-xs hover:scale-105 border border-transparent text-white bg-violet-600 hover:bg-violet-500 active:bg-violet-600">
+                <button onclick="showStripeLModal()"
+                    class="inline-flex items-center  hidden justify-center rounded-md px-3 py-2 shadow-md transition-all group font-semibold text-xs hover:scale-105 border border-transparent text-white bg-violet-600 hover:bg-violet-500 active:bg-violet-600">
                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20"
                         aria-hidden="true" class="w-4 h-4 group-hover:scale-110 transition-all" height="1em" width="1em"
                         xmlns="http://www.w3.org/2000/svg">
@@ -41,7 +167,7 @@
                             d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
                             clip-rule="evenodd"></path>
                     </svg>
-                    <span class="ml-1">Buy Credits</span>
+                    <span class="ml-1"><a href="#">Buy Credits</a></span>
                 </button>
             </div>
         </div>
@@ -51,11 +177,16 @@
             <div class="flex items-start w-full group pt-2 pb-4 mb-4">
                 <div class="flex items-start w-5/6">
                     <div class="rounded-full overflow-hidden size-12 flex-shrink-0">
-                        <img src="imgs/nanami.avif" alt="">
+                        <img src="https://pointe-aditya.s3.amazonaws.com/plain-black-background.jpg" alt="">
                     </div>
                     <div class="ps-2">
-                        <h4 class="font-15 font-bold">Example chat</h4>
-                        <p class="font-15">Example chatExample chatExample chatExample chat.</p>
+                        <h4 class="font-15 font-bold">
+
+                            SampleApp
+
+                        </h4>
+                        <p class="font-15">Sample app bot</p>
+
                     </div>
                 </div>
                 <div class="w-1/6 flex justify-center">
@@ -119,8 +250,44 @@
             </div>
         </div>
         <!-- Chat Area ends here -->
+        <!-- <div class="chattextarea border-t border-gray-700 py-3 md:px-9">
+            <p class="text-center font-15">
+
+            </p>
+            <div class="border border-gray-700 flex items-center rounded-full px-3 mt-2">
+
+                <textarea id="textmessage"
+                    class="resize-none bg-transparent outline-none text-base font-15 px-2 py-2 overflow-hidden grow"
+                    placeholder="Type your message"></textarea>
+
+                <button id="submit-message" class="px-1 py-2 me-2" type="button" title="Submit Message"><svg
+                        stroke="currentColor" fill="rgb(60, 133, 246)" stroke-width="0" viewBox="0 0 24 24"
+                        id="send-btn-icon" class=" dark" height="25" width="25" xmlns="http://www.w3.org/2000/svg"
+                        style="color: rgb(60, 133, 246); --darkreader-inline-fill: currentColor; --darkreader-inline-stroke: currentColor; --darkreader-inline-color: #589ee0;"
+                        data-darkreader-inline-fill="" data-darkreader-inline-stroke="" data-darkreader-inline-color="">
+                        <path fill="none" d="M0 0h24v24H0z"></path>
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                    </svg>
+                </button>
+                <img id="loader" class="hidden me-2" src="imgs/loader2.gif" width="20px" style="width: 30px; height: 30px" alt="">
+                <button id="clear-chat" class="px-1 py-2">
+                    <svg width="25px" height="25px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"
+                        fill="#ffffff">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path fill="#d9706c"
+                                d="M160 256H96a32 32 0 0 1 0-64h256V95.936a32 32 0 0 1 32-32h256a32 32 0 0 1 32 32V192h256a32 32 0 1 1 0 64h-64v672a32 32 0 0 1-32 32H192a32 32 0 0 1-32-32V256zm448-64v-64H416v64h192zM224 896h576V256H224v640zm192-128a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32zm192 0a32 32 0 0 1-32-32V416a32 32 0 0 1 64 0v320a32 32 0 0 1-32 32z">
+                            </path>
+                        </g>
+                    </svg>
+                </button>
+            </div>
+        </div> -->
         <div class="chattextarea border-t border-gray-700 py-3 md:px-9">
-            <p class="text-center font-15">10 Credits left</p>
+            <p class="text-center font-15">
+
+            </p>
             <div class="border border-gray-700 rounded-lg px-3 mt-2">
                 <div class="w-full">
                     <div class="img-placeholder"></div>
@@ -142,7 +309,7 @@
                         </button>
                         <img id="loader" class="hidden me-2" src="imgs/loader2.gif" width="20px" style="width: 30px; height: 30px" alt="">
                         <input type="file" id="filePicker" accept="image/png, image/jpg, image/gif, image/jpeg">
-                        <button id="customFileButton" class="btn btn-primary px-1 py-2 me-2">
+                        <button id="customFileButton" class="btn  hidden  btn-primary px-1 py-2 me-2">
                             <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"/>
@@ -169,11 +336,81 @@
                 </div>
             </div>
         </div>
+<center> <span class="text-sm p-2">
+
+
+
+
+
+  Powered by <a href="https://pmfm.ai" target="_blank">pmfm.ai</a>
+    <a href="https://discord.gg/FnktGy3mkV" target="_blank" class="text-sm p-2">Request Support</a>
+    <a href="#" class="text-sm p-2">Sign out</a>
+
+
+  </span>
+</center>
         <!-- Chat textarea ends here -->
 
     </main>
 
+    <script>
+    const modalCredits = document.getElementById('modalCredits');
 
+    const closeButtonCredits = document.getElementById('closeButtonCredits');
+
+    closeButtonCredits.addEventListener('click', () => {
+     modalCredits.classList.add('hidden');
+   });
+
+   document.getElementById('close-button').addEventListener('click', function() {
+       document.getElementById('chatgptkey-modal').classList.add('hidden');
+   });
+
+   function chatgptapimodalopen() {
+     document.getElementById('chatgptkey-modal').classList.remove('hidden');
+   }
+
+   document.getElementById('chatgptkey-modal-button').addEventListener('click', async () => {
+       const apiKey = document.getElementById('apiKey').value;
+
+       if (apiKey.trim() == "") {return;}
+
+       document.getElementById('chatgptkey-modal-button').disabled = true;
+       document.getElementById('textkey').innerHTML = "Saving Key...";
+       // document.getElementById('chatgptkey-modal').style.display = "none";
+       try {
+           const keyResponse = await fetch('/updateOpenAIKey', {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({ apiKey }),
+           });
+
+           if (!keyResponse.ok) {
+               throw new Error('Network response was not ok.');
+           }
+
+           const data = await keyResponse.json();
+
+           if (data.message !== "success") {
+               document.getElementById('textkey').innerHTML = "Your API Key is invalid or cannot be used. Please try again.<br><br>This error can also occur if you have not attached any payment method to your account. You can do that <a href='https://platform.openai.com/account/billing/payment-methods' style='text-decoration: underline;' target='_blank'>here</a>.";
+               return;
+           }
+
+           // Handle success here, e.g., close modal or show success message
+           document.getElementById('textkey').innerHTML = "Key saved successfully.";
+
+       } catch (error) {
+           console.error('There was a problem with the fetch operation:', error);
+           document.getElementById('textkey').innerHTML = "An error occurred. Please try again.";
+       } finally {
+           // Re-enable the button or perform other cleanup actions
+           document.getElementById('chatgptkey-modal-button').disabled = false;
+       }
+   });
+
+    </script>
 
     <script src="main.js"></script>
 </body>
